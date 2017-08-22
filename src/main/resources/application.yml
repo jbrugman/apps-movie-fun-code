@@ -4,8 +4,14 @@ spring:
     properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
   datasource:
     url: jdbc:mysql://localhost:3306/movies?useSSL=false
-    username: root
+    username: movie
 
   mvc.view:
     prefix: /WEB-INF/
     suffix: .jsp
+
+s3:
+  endpointUrl: http://127.0.0.1:9000
+  accessKey: R30SFCJ00D4JL8K1RXG3
+  secretKey: cK2kpTsduFhHPvaLSYIYZmfpghzoN4zFxtskjRpC
+  bucketName: moviefun
