@@ -5,7 +5,7 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/movies?useSSL=false
-    username: root
+    username: movie
 
   mvc.view:
     prefix: /WEB-INF/
@@ -14,6 +14,10 @@ spring:
 logging.level:
   root: WARN
   org.superbiz.moviefun: DEBUG
+
+rabbitmq:
+  uri: amqp://guest:guest@localhost
+  queue: my-rabbit-queue
 
 s3:
   accessKey: <access key id>
