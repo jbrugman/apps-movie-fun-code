@@ -1,4 +1,4 @@
-package org.superbiz.moviefun.albums.albums;
+package org.superbiz.moviefun.albums;
 
 import org.junit.Test;
 import org.superbiz.moviefun.albums.Album;

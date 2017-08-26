@@ -22,3 +22,6 @@ s3:
 
 movies:
   url: http://localhost:8082/movies
+
+albums:
+  url: http://localhost:8081/albums

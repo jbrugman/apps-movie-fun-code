@@ -8,9 +8,9 @@ import java.util.List;
 @RequestMapping("/albums")
 public class AlbumsController {
 
-    private AlbumsBean albumsBean;
+    private AlbumsRepository albumsBean;
 
-    public AlbumsController(AlbumsBean albumsBean) {
+    public AlbumsController(AlbumsRepository albumsBean) {
         this.albumsBean = albumsBean;
     }
 
