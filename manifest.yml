@@ -15,3 +15,4 @@ applications:
   env:
     ALBUMS_URL: http://album-service.cfapps-02.haas-66.pez.pivotal.io/albums
     MOVIES_URL: http://movie-service.cfapps-02.haas-66.pez.pivotal.io/movies
+    TRUST_CERTS: api.sys.longs.pal.pivotal.io,auth-domain.login.sys.longs.pal.pivotal.io
