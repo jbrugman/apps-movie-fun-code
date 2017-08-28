@@ -1,5 +1,8 @@
 rootProject.name = "moviefun"
 
+include "databases:album-database"
+include "databases:movie-database"
+
 include "applications:movie-fun-app"
 include "applications:album-service"
 include "applications:movie-service"
@@ -8,3 +11,5 @@ include "components:albums"
 include "components:blobstore"
 include "components:movies"
 include "components:movie-fun-api"
+
+
