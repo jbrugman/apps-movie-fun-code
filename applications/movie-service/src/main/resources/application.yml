@@ -6,7 +6,7 @@ spring:
 
   datasource:
     url: jdbc:mysql://localhost:3306/movies?useSSL=false
-    username: root
+    username: movie
 
 logging.level:
   root: WARN
