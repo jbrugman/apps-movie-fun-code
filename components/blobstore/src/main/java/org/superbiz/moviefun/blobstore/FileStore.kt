@@ -14,7 +14,6 @@ class FileStore : BlobStore {
 
     private val tika = Tika()
 
-
     @Throws(IOException::class)
     override fun put(blob: Blob) {
         val targetFile = File(blob.name)
@@ -22,7 +21,6 @@ class FileStore : BlobStore {
         targetFile.delete()
         targetFile.parentFile.mkdirs()
         targetFile.createNewFile()
-
 
         FileOutputStream(targetFile).use { outputStream -> IOUtils.copy(blob.inputStream, outputStream) }
     }

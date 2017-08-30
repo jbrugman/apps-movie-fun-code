@@ -1,3 +1,4 @@
+
 package org.superbiz.moviefun.albums
 
 import org.junit.Test
@@ -9,13 +10,12 @@ class AlbumTest {
 
     @Test
     fun testIsEquivalent() {
-        val persisted = Album("Radiohead", "OK Computer", 1997, 8)
-        persisted.id = 10L
+        val persisted = Album(id = 10, artist = "Radiohead", title = "OK Computer", year = 1997, rating = 8)
 
-        val sameFromCsv = Album("Radiohead", "OK Computer", 1997, 9)
+        val sameFromCsv = Album(artist = "Radiohead", title = "OK Computer", year = 1997, rating = 9)
         assertThat(persisted.isEquivalent(sameFromCsv), `is`(true))
 
-        val otherFromCsv = Album("Radiohead", "Kid A", 2000, 9)
+        val otherFromCsv = Album(artist = "Radiohead", title = "Kid A", year = 2000, rating = 9)
         assertThat(persisted.isEquivalent(otherFromCsv), `is`(false))
     }
 }

@@ -2,20 +2,13 @@ package org.superbiz.moviefun.albums
 
 import com.fasterxml.jackson.databind.ObjectReader
 import com.fasterxml.jackson.dataformat.csv.CsvMapper
-import com.fasterxml.jackson.dataformat.csv.CsvSchema
-import org.slf4j.Logger
+import com.fasterxml.jackson.dataformat.csv.CsvSchema.ColumnType
+import com.fasterxml.jackson.dataformat.csv.CsvSchema.builder
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.superbiz.moviefun.CsvUtils
-import org.superbiz.moviefun.blobstore.Blob
 import org.superbiz.moviefun.blobstore.BlobStore
-
 import java.io.IOException
-import java.util.Optional
-import java.util.stream.Stream
-
-import com.fasterxml.jackson.dataformat.csv.CsvSchema.ColumnType
-import com.fasterxml.jackson.dataformat.csv.CsvSchema.builder
 
 @Service
 class AlbumsUpdater(private val blobStore: BlobStore, private val albumsRepository: AlbumsRepository) {
@@ -55,32 +48,33 @@ class AlbumsUpdater(private val blobStore: BlobStore, private val albumsReposito
 
     private fun createNewAlbums(albumsToHave: List<Album>, albumsWeHave: List<Album>) {
         val albumsToCreate = albumsToHave
-                .stream()
-                .filter { album -> albumsWeHave.stream().noneMatch(Predicate<Album> { album.isEquivalent(it) }) }
+                .filter { album -> albumsWeHave.stream().noneMatch({ album.isEquivalent(it) }) }
 
-        albumsToCreate.forEach(Consumer<Album> { albumsRepository.addAlbum(it) })
+        albumsToCreate.forEach({ albumsRepository.addAlbum(it) })
     }
 
     private fun deleteOldAlbums(albumsToHave: List<Album>, albumsWeHave: List<Album>) {
         val albumsToDelete = albumsWeHave
-                .stream()
-                .filter { album -> albumsToHave.stream().noneMatch(Predicate<Album> { album.isEquivalent(it) }) }
+                .filter { album -> albumsToHave.stream().noneMatch({ album.isEquivalent(it) }) }
 
-        albumsToDelete.forEach(Consumer<Album> { albumsRepository.deleteAlbum(it) })
+        albumsToDelete.forEach({ albumsRepository.deleteAlbum(it) })
     }
 
     private fun updateExistingAlbums(albumsToHave: List<Album>, albumsWeHave: List<Album>) {
         val albumsToUpdate = albumsToHave
-                .stream()
                 .map { album -> addIdToAlbumIfExists(albumsWeHave, album) }
-                .filter(Predicate<Album> { it.hasId() })
+                .filter({ it.hasId() })
 
-        albumsToUpdate.forEach(Consumer<Album> { albumsRepository.updateAlbum(it) })
+        albumsToUpdate.forEach({ albumsRepository.updateAlbum(it) })
     }
 
     private fun addIdToAlbumIfExists(existingAlbums: List<Album>, album: Album): Album {
-        val maybeExisting = existingAlbums.stream().filter(Predicate<Album> { album.isEquivalent(it) }).findFirst()
-        maybeExisting.ifPresent { existing -> album.id = existing.id }
+        val maybeExisting = existingAlbums.filter({ album.isEquivalent(it) }).firstOrNull()
+
+        if (maybeExisting != null ) {
+            album.id = maybeExisting.id
+        }
+
         return album
     }
 }

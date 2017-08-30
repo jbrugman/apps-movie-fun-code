@@ -66,7 +66,7 @@ class MovieServlet(private val moviesClient: MoviesClient) : HttpServlet() {
 
             val ids = request.getParameterValues("id")
             for (id in ids) {
-                moviesClient.deleteMovieId(Long(id))
+                moviesClient.deleteMovieId(id.toLong())
             }
 
             response.sendRedirect("moviefun")

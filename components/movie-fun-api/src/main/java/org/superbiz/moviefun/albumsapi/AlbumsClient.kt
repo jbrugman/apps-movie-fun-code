@@ -11,9 +11,7 @@ class AlbumsClient(private val albumsUrl: String, private val restOperations: Re
         restOperations.postForEntity(albumsUrl, album, AlbumInfo::class.java)
     }
 
-    fun find(id: Long): AlbumInfo {
-        return restOperations.getForEntity(albumsUrl + "/" + id, AlbumInfo::class.java).body
-    }
+    fun find(id: Long) = restOperations.getForEntity(albumsUrl + "/" + id, AlbumInfo::class.java).body
 
     val albums: List<AlbumInfo>
         get() {

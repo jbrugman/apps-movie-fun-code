@@ -1,5 +1,3 @@
-package org.superbiz.moviefun.albums
-
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -18,33 +16,24 @@ package org.superbiz.moviefun.albums
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.superbiz.moviefun.albums
 
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
-import java.io.Serializable
 
 @Entity
-class Album : Serializable {
-
+data class Album(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null
+    var id: Long? = null,
 
-    var artist: String? = null
-    var title: String? = null
-    var year: Int = 0
-    var rating: Int = 0
-
-    constructor() {}
-
-    constructor(artist: String, title: String, year: Int, rating: Int) {
-        this.artist = artist
-        this.title = title
-        this.year = year
-        this.rating = rating
-    }
+    val artist: String? = null,
+    val title: String? = null,
+    val year: Int = 0,
+    val rating: Int = 0
+) {
 
     fun hasId(): Boolean {
         return id != null
@@ -52,19 +41,9 @@ class Album : Serializable {
 
     fun isEquivalent(other: Album): Boolean {
         if (year != other.year) return false
-        if (!isEqual(title, other.title)) return false
-        if (!isEqual(artist, other.artist)) return false
+        if (title != other.title) return false
+        if (artist != other.artist) return false
 
         return true
-    }
-
-    companion object {
-
-        const val serialVersionUID = 1L
-
-        private fun <T> isEqual(one: T?, other: T?): Boolean {
-            if (if (one != null) one != other else other != null) return false
-            return true
-        }
     }
 }

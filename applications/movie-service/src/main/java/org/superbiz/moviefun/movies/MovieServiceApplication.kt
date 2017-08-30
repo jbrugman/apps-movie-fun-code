@@ -6,9 +6,11 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient
 
 @EnableEurekaClient
 @SpringBootApplication
-object MovieServiceApplication {
-    @JvmStatic
-    fun main(args: Array<String>) {
-        SpringApplication.run(MovieServiceApplication::class.java, *args)
+class MovieServiceApplication {
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            SpringApplication.run(MovieServiceApplication::class.java, *args)
+        }
     }
 }

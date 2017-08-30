@@ -1,12 +1,12 @@
 package org.superbiz.moviefun.moviesapi
 
 class MovieInfo {
-    val id: Long?
-    val title: String?
-    val director: String?
-    val genre: String?
-    val rating: Int
-    val year: Int
+    var id: Long? = null
+    var title: String? = null
+    var director: String? = null
+    var genre: String? = null
+    var rating: Int = 0
+    var year: Int = 0
 
     constructor() {}
 
@@ -34,7 +34,7 @@ class MovieInfo {
     }
 
     override fun hashCode(): Int {
-        var result = (id xor id!!.ushr(32)).toInt()
+        var result = (id!! xor id!!.ushr(32)).toInt()
         result = 31 * result + (director?.hashCode() ?: 0)
         result = 31 * result + (title?.hashCode() ?: 0)
         result = 31 * result + year

@@ -1,6 +1,5 @@
 package org.superbiz.moviefun
 
-import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.services.s3.AmazonS3Client
 import org.springframework.beans.factory.annotation.Value
@@ -10,6 +9,7 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient
 import org.springframework.cloud.netflix.hystrix.EnableHystrix
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import org.superbiz.moviefun.albumsapi.CoverCatalog
 import org.superbiz.moviefun.blobstore.BlobStore
 import org.superbiz.moviefun.blobstore.S3Store
@@ -20,15 +20,21 @@ import org.superbiz.moviefun.moviesapi.MovieServlet
 @SpringBootApplication
 class Application {
 
-    @Bean
-    fun actionServletRegistration(movieServlet: MovieServlet): ServletRegistrationBean {
-        return ServletRegistrationBean(movieServlet, "/moviefun/*")
-    }
 
-    @Value("\${s3.endpointUrl}") internal var s3EndpointUrl: String? = null
-    @Value("\${s3.accessKey}") internal var s3AccessKey: String? = null
-    @Value("\${s3.secretKey}") internal var s3SecretKey: String? = null
-    @Value("\${s3.bucketName}") internal var s3BucketName: String? = null
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            SpringApplication.run(Application::class.java, *args)
+        }
+    }
+}
+
+@Configuration
+class AppConfig {
+    @Value("\${s3.endpointUrl}") private var s3EndpointUrl: String? = null
+    @Value("\${s3.accessKey}") private var s3AccessKey: String? = null
+    @Value("\${s3.secretKey}") private var s3SecretKey: String? = null
+    @Value("\${s3.bucketName}") private var s3BucketName: String? = null
 
     @Bean
     fun blobStore(): BlobStore {
@@ -40,15 +46,7 @@ class Application {
     }
 
     @Bean
-    fun coverCatalog(blobStore: BlobStore): CoverCatalog {
-        return CoverCatalog(blobStore)
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun main(args: Array<String>) {
-            SpringApplication.run(Application::class.java, *args)
-        }
+    fun actionServletRegistration(movieServlet: MovieServlet): ServletRegistrationBean {
+        return ServletRegistrationBean(movieServlet, "/moviefun/*")
     }
 }

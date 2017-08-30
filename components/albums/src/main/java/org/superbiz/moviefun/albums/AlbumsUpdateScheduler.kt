@@ -1,13 +1,11 @@
 package org.superbiz.moviefun.albums
 
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.Scheduled
-
 import javax.sql.DataSource
 
 @Configuration
@@ -15,15 +13,11 @@ import javax.sql.DataSource
 @EnableScheduling
 class AlbumsUpdateScheduler(dataSource: DataSource, private val albumsUpdater: AlbumsUpdater) {
 
-    private val jdbcTemplate: JdbcTemplate
+    private val jdbcTemplate: JdbcTemplate = JdbcTemplate(dataSource)
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    init {
-        this.jdbcTemplate = JdbcTemplate(dataSource)
-    }
 
-
-    @Scheduled(initialDelay = 5 * SECONDS, fixedRate = 15 * SECONDS)
+    @Scheduled(initialDelay = 5_000, fixedRate = 15_000)
     fun run() {
         try {
             logger.debug("Checking for albums task to start")
@@ -31,7 +25,7 @@ class AlbumsUpdateScheduler(dataSource: DataSource, private val albumsUpdater: A
             if (startAlbumSchedulerTask()) {
                 logger.debug("Starting albums update")
 
-                AlbumsUpdaterKt.update(albumsUpdater)
+                albumsUpdater.update()
 
                 logger.debug("Finished albums update")
             } else {
@@ -53,10 +47,5 @@ class AlbumsUpdateScheduler(dataSource: DataSource, private val albumsUpdater: A
         )
 
         return updatedRows > 0
-    }
-
-    companion object {
-
-        private val SECONDS: Long = 1000
     }
 }

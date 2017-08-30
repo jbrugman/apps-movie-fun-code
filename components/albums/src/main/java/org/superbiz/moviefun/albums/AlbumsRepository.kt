@@ -27,34 +27,31 @@ import javax.persistence.PersistenceContext
 import javax.persistence.criteria.CriteriaQuery
 
 @Repository
-class AlbumsRepository {
-
-    @PersistenceContext
-    private val entityManager: EntityManager? = null
+class AlbumsRepository(val entityManager: EntityManager) {
 
     @Transactional
     fun addAlbum(album: Album) {
-        entityManager!!.persist(album)
+        entityManager.persist(album)
     }
 
     fun find(id: Long): Album {
-        return entityManager!!.find(Album::class.java, id)
+        return entityManager.find(Album::class.java, id)
     }
 
     val albums: List<Album>
         get() {
-            val cq = entityManager!!.criteriaBuilder.createQuery(Album::class.java)
+            val cq = entityManager.criteriaBuilder.createQuery(Album::class.java)
             cq.select(cq.from(Album::class.java))
             return entityManager.createQuery(cq).resultList
         }
 
     @Transactional
-    fun deleteAlbum(album: Album) {
-        entityManager!!.remove(album)
+    fun updateAlbum(album: Album){
+        entityManager.merge(album)
     }
 
     @Transactional
-    fun updateAlbum(album: Album) {
-        entityManager!!.merge(album)
+    fun deleteAlbum(album: Album) {
+        entityManager.remove(album)
     }
 }

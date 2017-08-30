@@ -7,17 +7,11 @@ import org.springframework.web.bind.annotation.*
 class AlbumsController(private val albumsRepository: AlbumsRepository) {
 
     @PostMapping
-    fun addAlbum(@RequestBody album: Album) {
-        albumsRepository.addAlbum(album)
-    }
+    fun addAlbum(@RequestBody album: Album) = albumsRepository.addAlbum(album)
 
     @GetMapping
-    fun index(): List<Album> {
-        return albumsRepository.albums
-    }
+    fun index() = albumsRepository.albums
 
     @GetMapping("/{albumId}")
-    fun details(@PathVariable albumId: Long): Album {
-        return albumsRepository.find(albumId)
-    }
+    fun details(@PathVariable albumId: Long) = albumsRepository.find(albumId)
 }

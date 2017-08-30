@@ -1,34 +1,18 @@
 package org.superbiz.moviefun.albumsapi
 
-class AlbumInfo {
+class AlbumInfo(var id: Long?, var artist: String, var title: String, var year: Int, var rating: Int) {
 
-    val id: Long?
-    val artist: String?
-    val title: String?
-    val year: Int
-    val rating: Int
+     override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
 
-    constructor() {}
+        other as AlbumInfo
 
-    constructor(id: Long?, artist: String, title: String, year: Int, rating: Int) {
-        this.id = id
-        this.artist = artist
-        this.title = title
-        this.year = year
-        this.rating = rating
-    }
-
-    override fun equals(o: Any?): Boolean {
-        if (this === o) return true
-        if (o == null || javaClass != o.javaClass) return false
-
-        val albumInfo = o as AlbumInfo?
-
-        if (year != albumInfo!!.year) return false
-        if (rating != albumInfo.rating) return false
-        if (if (id != null) id != albumInfo.id else albumInfo.id != null) return false
-        if (if (artist != null) artist != albumInfo.artist else albumInfo.artist != null) return false
-        return if (title != null) title == albumInfo.title else albumInfo.title == null
+        if (year != other.year) return false
+        if (rating != other.rating) return false
+        if (if (id != null) id != other.id else other.id != null) return false
+        if (if (artist != null) artist != other.artist else other.artist != null) return false
+        return if (title != null) title == other.title else other.title == null
     }
 
     override fun hashCode(): Int {

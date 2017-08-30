@@ -24,55 +24,48 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 import javax.persistence.EntityManager
-import javax.persistence.PersistenceContext
-import javax.persistence.TypedQuery
-import javax.persistence.criteria.*
-import javax.persistence.metamodel.EntityType
 
 @Repository
-class MoviesRepository {
+class MoviesRepository(val entityManager: EntityManager) {
 
     private val logger = LoggerFactory.getLogger(this.javaClass)
-
-    @PersistenceContext
-    private val entityManager: EntityManager? = null
-
-    fun find(id: Long?): Movie {
-        return entityManager!!.find<Movie>(Movie::class.java, id)
-    }
 
     @Transactional
     fun addMovie(movie: Movie) {
         logger.debug("Creating movie with title {}, and year {}", movie.title, movie.year)
+        entityManager.persist(movie)
+    }
 
-        entityManager!!.persist(movie)
+    fun find(id: Long?): Movie {
+        return entityManager.find(Movie::class.java, id)
     }
 
     @Transactional
     fun updateMovie(movie: Movie) {
-        entityManager!!.merge(movie)
+        entityManager.merge(movie)
     }
 
     @Transactional
     fun deleteMovie(movie: Movie) {
-        entityManager!!.remove(movie)
+        entityManager.remove(movie)
     }
 
     @Transactional
     fun deleteMovieId(id: Long) {
-        val movie = entityManager!!.find<Movie>(Movie::class.java, id)
+        val movie = entityManager.find<Movie>(Movie::class.java, id)
         deleteMovie(movie)
     }
 
+
     val movies: List<Movie>
         get() {
-            val cq = entityManager!!.criteriaBuilder.createQuery<Movie>(Movie::class.java)
-            cq.select(cq.from<Movie>(Movie::class.java))
+            val cq = entityManager.criteriaBuilder.createQuery(Movie::class.java)
+            cq.select(cq.from(Movie::class.java))
             return entityManager.createQuery(cq).resultList
         }
 
     fun findAll(firstResult: Int, maxResults: Int): List<Movie> {
-        val cq = entityManager!!.criteriaBuilder.createQuery<Movie>(Movie::class.java)
+        val cq = entityManager.criteriaBuilder.createQuery<Movie>(Movie::class.java)
         cq.select(cq.from<Movie>(Movie::class.java))
         val q = entityManager.createQuery(cq)
         q.maxResults = maxResults
@@ -81,7 +74,7 @@ class MoviesRepository {
     }
 
     fun countAll(): Int {
-        val cq = entityManager!!.criteriaBuilder.createQuery<Long>(Long::class.java)
+        val cq = entityManager.criteriaBuilder.createQuery<Long>(Long::class.java)
         val rt = cq.from<Movie>(Movie::class.java)
         cq.select(entityManager.criteriaBuilder.count(rt))
         val q = entityManager.createQuery(cq)
@@ -89,7 +82,7 @@ class MoviesRepository {
     }
 
     fun count(field: String, searchTerm: String): Int {
-        val qb = entityManager!!.criteriaBuilder
+        val qb = entityManager.criteriaBuilder
         val cq = qb.createQuery<Long>(Long::class.java)
         val root = cq.from<Movie>(Movie::class.java)
         val type = entityManager.metamodel.entity<Movie>(Movie::class.java)
@@ -104,7 +97,7 @@ class MoviesRepository {
     }
 
     fun findRange(field: String, searchTerm: String, firstResult: Int, maxResults: Int): List<Movie> {
-        val qb = entityManager!!.criteriaBuilder
+        val qb = entityManager.criteriaBuilder
         val cq = qb.createQuery<Movie>(Movie::class.java)
         val root = cq.from<Movie>(Movie::class.java)
         val type = entityManager.metamodel.entity<Movie>(Movie::class.java)
@@ -120,6 +113,6 @@ class MoviesRepository {
     }
 
     fun clean() {
-        entityManager!!.createQuery("delete from Movie").executeUpdate()
+        entityManager.createQuery("delete from Movie").executeUpdate()
     }
 }

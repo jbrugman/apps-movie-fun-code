@@ -12,16 +12,22 @@ buildscript {
         slf4jVersion = "1.7.21"
         junitVersion = "4.12"
         mysqlVersion = "5.1.40"
+
+        kotlinVersion = "1.1.4-2"
     }
 
     repositories {
         mavenCentral()
+
     }
 
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
         classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion"
     }
+
 }
 
 task dependenciesGraphDot {
